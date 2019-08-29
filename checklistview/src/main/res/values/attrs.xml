@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ChecklistView">
+        <attr name="dragHandleColor" format="color"/>
+        <attr name="removeButtonColor" format="color"/>
+        <attr name="textColor" format="color"/>
+        <attr name="hintTextColor" format="color"/>
+    </declare-styleable>
+</resources>
