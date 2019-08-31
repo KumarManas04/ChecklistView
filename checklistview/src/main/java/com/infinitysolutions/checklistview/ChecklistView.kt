@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), ChecklistAdapter.DragListener{
-
+    private lateinit var mAdapter: ChecklistAdapter
+    private var moveCheckedToBottom = true
     private val dragColor: Int
     private val removeColor: Int
     private val textColor: Int
@@ -22,7 +23,7 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
         tA.recycle()
     }
 
-    private lateinit var mAdapter: ChecklistAdapter
+
     private val itemTouchHelper by lazy {
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END, 0) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
@@ -54,12 +55,18 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
     fun setList(content: String){
         val itemsList = ArrayList<ChecklistItem>()
         val items = content.split("\n")
+        val strBuilder = StringBuilder()
+        var isChecked: Boolean
         for(item in items){
             val arr = item.split(" ")
-            if(arr[0] == "✓")
-                itemsList.add(ChecklistItem(arr[1], true))
-            else
-                itemsList.add(ChecklistItem(arr[1], false))
+            isChecked = arr[0] == "✓"
+            for(i in 1 until arr.size) {
+                strBuilder.append(arr[i])
+                if(i != arr.size-1)
+                    strBuilder.append(" ")
+            }
+            itemsList.add(ChecklistItem(strBuilder.toString(), isChecked))
+            strBuilder.clear()
         }
         setList(itemsList)
     }
@@ -70,7 +77,14 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
         mAdapter = ChecklistAdapter(itemsList, context, dragColor, removeColor, textColor, hintTextColor)
         mAdapter.setDragListener(this)
         this.adapter = mAdapter
+        mAdapter.setMoveCheckedToBottom(moveCheckedToBottom)
         itemTouchHelper.attachToRecyclerView(this)
+    }
+
+    fun moveCheckedToBottom(shouldMove: Boolean){
+        moveCheckedToBottom = shouldMove
+        if(mAdapter != null)
+            mAdapter.setMoveCheckedToBottom(moveCheckedToBottom)
     }
 
     override fun toString(): String{

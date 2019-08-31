@@ -25,6 +25,7 @@ class ChecklistAdapter(
     private val hintTextColor: Int
 ) : RecyclerView.Adapter<ChecklistAdapter.ViewHolder>() {
     private lateinit var mDragListener: DragListener
+    private var moveCheckedToBottom = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.list_item_view, parent, false)
@@ -51,7 +52,7 @@ class ChecklistAdapter(
                         spannableString.setSpan(StrikethroughSpan(), 0, content.length, 0)
                         holder.itemContent.alpha = 0.5f
 
-                        if (button.isPressed) {
+                        if (button.isPressed && moveCheckedToBottom) {
                             val from = holder.adapterPosition
                             val to = itemsList.size - 2
                             val item = itemsList[from]
@@ -129,7 +130,7 @@ class ChecklistAdapter(
                             spannableString.setSpan(StrikethroughSpan(), 0, content.length, 0)
                             holder.itemContent.alpha = 0.5f
 
-                            if (button.isPressed) {
+                            if (button.isPressed && moveCheckedToBottom) {
                                 val from = holder.adapterPosition
                                 val to = itemsList.size - 2
                                 val item = itemsList[from]
@@ -200,6 +201,10 @@ class ChecklistAdapter(
 
     fun setDragListener(dragListener: DragListener) {
         mDragListener = dragListener
+    }
+
+    fun setMoveCheckedToBottom(shouldMove: Boolean){
+        moveCheckedToBottom = shouldMove
     }
 
     fun getList(): ArrayList<ChecklistItem> {

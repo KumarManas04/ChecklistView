@@ -20,7 +20,7 @@ allprojects {
 Add a dependency to your project's <b>module</b> build.gradle
 ```
 dependencies {
-     implementation 'com.github.KumarManas04:ChecklistView:1.0'
+     implementation 'com.github.KumarManas04:ChecklistView:1.1'
 }
 ```
 ## Usage
@@ -48,6 +48,9 @@ In your Activity or Fragment get an instance of ChecklistView. Let it be mCheckl
 mChecklistView.setList(itemsList)   // itemsList is an ArrayList of ChecklistItem
          OR
 mChecklistView.setList(contentString) //contentString is the Checklist converted into string form
+
+//Some options
+mChecklistView.moveCheckedToBottom(false) //Move checked item to the bottom(default value is true)
 ```
 To get the Checklist in String form
 ```
