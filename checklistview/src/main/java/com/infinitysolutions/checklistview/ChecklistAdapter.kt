@@ -2,7 +2,6 @@ package com.infinitysolutions.checklistview
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Paint
 import android.text.SpannableString
 import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
@@ -38,7 +37,6 @@ class ChecklistAdapter(
         holder.itemRemove.setColorFilter(removeColor)
         holder.itemContent.setTextColor(textColor)
         holder.itemContent.setHintTextColor(hintTextColor)
-        holder.itemCheckBox.isChecked = itemsList[position].isChecked
         holder.itemContent.setText(itemsList[position].text)
 
         if (holder.adapterPosition < itemsList.size - 1) {
@@ -87,20 +85,19 @@ class ChecklistAdapter(
             }
         }
 
-        if (holder.adapterPosition == itemsList.size - 1) {
-            holder.itemContent.addTextChangedListener {
-                if (it.toString() != "") {
-                    if (holder.adapterPosition == itemsList.size - 1) {
-                        itemsList.add(ChecklistItem("", false))
-                        notifyItemInserted(itemsList.size)
-                        notifyItemChanged(
-                            holder.adapterPosition,
-                            holder.itemContent.text.toString()
-                        )
-                    }
-                }
+        holder.itemContent.addTextChangedListener {
+            itemsList[holder.adapterPosition].text = it.toString()
+            if (it.toString() != "" && holder.adapterPosition == itemsList.size - 1) {
+                itemsList.add(ChecklistItem("", false))
+                notifyItemInserted(itemsList.size)
+                notifyItemChanged(
+                    holder.adapterPosition,
+                    holder.itemContent.text.toString()
+                )
             }
-        } else {
+        }
+
+        if (holder.adapterPosition != itemsList.size - 1) {
             holder.itemRemove.setOnClickListener {
                 val pos = holder.adapterPosition
                 itemsList.removeAt(pos)
@@ -156,11 +153,27 @@ class ChecklistAdapter(
                 }
                 return@setOnTouchListener true
             }
-            holder.itemRemove.setOnClickListener {
-                val pos = holder.adapterPosition
-                itemsList.removeAt(pos)
-                notifyItemRemoved(pos)
+
+            holder.itemContent.addTextChangedListener {
+                itemsList[holder.adapterPosition].text = it.toString()
+                if (it.toString() != "" && holder.adapterPosition == itemsList.size - 1) {
+                    itemsList.add(ChecklistItem("", false))
+                    notifyItemInserted(itemsList.size)
+                    notifyItemChanged(
+                        holder.adapterPosition,
+                        holder.itemContent.text.toString()
+                    )
+                }
             }
+
+            if (holder.adapterPosition != itemsList.size - 1) {
+                holder.itemRemove.setOnClickListener {
+                    val pos = holder.adapterPosition
+                    itemsList.removeAt(pos)
+                    notifyItemRemoved(pos)
+                }
+            }
+
             holder.itemRemove.visibility = View.VISIBLE
             holder.itemContent.setOnFocusChangeListener { v, hasFocus ->
                 if (hasFocus && holder.adapterPosition != itemsList.size - 1) {
@@ -188,10 +201,7 @@ class ChecklistAdapter(
             to1++
         val fromItem = itemsList[from]
         itemsList.removeAt(from)
-        if (to1 < from)
-            itemsList.add(to1, fromItem)
-        else
-            itemsList.add(to1 - 1, fromItem)
+        itemsList.add(to1, fromItem)
         notifyItemMoved(from, to1)
     }
 
@@ -203,7 +213,7 @@ class ChecklistAdapter(
         mDragListener = dragListener
     }
 
-    fun setMoveCheckedToBottom(shouldMove: Boolean){
+    fun setMoveCheckedToBottom(shouldMove: Boolean) {
         moveCheckedToBottom = shouldMove
     }
 

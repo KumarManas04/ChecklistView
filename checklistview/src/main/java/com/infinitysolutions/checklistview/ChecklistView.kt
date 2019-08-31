@@ -23,7 +23,6 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
         tA.recycle()
     }
 
-
     private val itemTouchHelper by lazy {
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.START or ItemTouchHelper.END, 0) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: ViewHolder, target: ViewHolder): Boolean {
@@ -83,21 +82,22 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
 
     fun moveCheckedToBottom(shouldMove: Boolean){
         moveCheckedToBottom = shouldMove
-        if(mAdapter != null)
+        if(::mAdapter.isInitialized)
             mAdapter.setMoveCheckedToBottom(moveCheckedToBottom)
     }
 
     override fun toString(): String{
         val itemsList = mAdapter.getList()
-        itemsList.removeAt(itemsList.size-1)
+        val itemsListNew = ArrayList<ChecklistItem>(itemsList)
+        itemsListNew.removeAt(itemsListNew.size-1)
         val strBuilder = StringBuilder()
-        for(i in 0 until itemsList.size){
-            if(itemsList[i].isChecked)
+        for(i in 0 until itemsListNew.size){
+            if(itemsListNew[i].isChecked)
                 strBuilder.append("✓ ")
             else
                 strBuilder.append("□ ")
-            strBuilder.append(itemsList[i].text)
-            if(i < itemsList.size-1)
+            strBuilder.append(itemsListNew[i].text)
+            if(i < itemsListNew.size-1)
                 strBuilder.append("\n")
         }
         return strBuilder.toString()

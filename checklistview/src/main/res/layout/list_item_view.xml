@@ -25,8 +25,9 @@
     <EditText
         android:id="@+id/item_content"
         android:background="@android:color/transparent"
+        android:layout_gravity="center_vertical"
         android:hint="@string/add_item"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:inputType="textCapSentences"
