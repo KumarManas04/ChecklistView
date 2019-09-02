@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), ChecklistAdapter.DragListener{
     private lateinit var mAdapter: ChecklistAdapter
     private var moveCheckedToBottom = true
+    private var showUndoOption = true
     private val dragColor: Int
     private val removeColor: Int
     private val textColor: Int
@@ -79,6 +80,7 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
         mAdapter.setDragListener(this)
         this.adapter = mAdapter
         mAdapter.setMoveCheckedToBottom(moveCheckedToBottom)
+        mAdapter.setShowUndoOption(showUndoOption)
         itemTouchHelper.attachToRecyclerView(this)
     }
 
@@ -86,6 +88,12 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
         moveCheckedToBottom = shouldMove
         if(::mAdapter.isInitialized)
             mAdapter.setMoveCheckedToBottom(moveCheckedToBottom)
+    }
+
+    fun setShowUndoOption(shouldShow: Boolean){
+        showUndoOption = shouldShow
+        if(::mAdapter.isInitialized)
+            mAdapter.setShowUndoOption(moveCheckedToBottom)
     }
 
     override fun toString(): String{

@@ -20,7 +20,7 @@ allprojects {
 Add a dependency to your project's <b>module</b> build.gradle
 ```
 dependencies {
-     implementation 'com.github.KumarManas04:ChecklistView:1.2'
+     implementation 'com.github.KumarManas04:ChecklistView:1.3'
 }
 ```
 ## Usage
@@ -51,6 +51,7 @@ mChecklistView.setList(contentString) //contentString is the Checklist converted
 
 //Some options
 mChecklistView.moveCheckedToBottom(false) //Move checked item to the bottom(default value is true)
+mChecklistView.setShowUndoOption(false)   //Enable or disable option to unto item remove(default value is true)
 ```
 To get the Checklist in String form
 ```

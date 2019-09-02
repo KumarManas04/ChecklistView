@@ -27,6 +27,7 @@ class ChecklistAdapter(
     private lateinit var mDragListener: DragListener
     private lateinit var mParent: View
     private var moveCheckedToBottom = true
+    private var showUndoOption = true
     private var removedItem: ChecklistItem? = null
     private var removedItemPos: Int? = null
 
@@ -104,16 +105,20 @@ class ChecklistAdapter(
         if (holder.adapterPosition != itemsList.size - 1) {
             holder.itemRemove.setOnClickListener {
                 val pos = holder.adapterPosition
-                removedItem = itemsList[pos]
-                removedItemPos = pos
+                if (showUndoOption) {
+                    removedItem = itemsList[pos]
+                    removedItemPos = pos
+                }
                 itemsList.removeAt(pos)
                 notifyItemRemoved(pos)
-                Snackbar.make(mParent, "Undo item remove", 5000)
-                    .setAction("Yes") {
-                        itemsList.add(removedItemPos!!, removedItem!!)
-                        notifyItemInserted(removedItemPos!!)
-                    }
-                    .show()
+                if (showUndoOption) {
+                    Snackbar.make(mParent, "Undo item remove", 5000)
+                        .setAction("Yes") {
+                            itemsList.add(removedItemPos!!, removedItem!!)
+                            notifyItemInserted(removedItemPos!!)
+                        }
+                        .show()
+                }
             }
         }
     }
@@ -181,16 +186,20 @@ class ChecklistAdapter(
             if (holder.adapterPosition != itemsList.size - 1) {
                 holder.itemRemove.setOnClickListener {
                     val pos = holder.adapterPosition
-                    removedItem = itemsList[pos]
-                    removedItemPos = pos
+                    if (showUndoOption) {
+                        removedItem = itemsList[pos]
+                        removedItemPos = pos
+                    }
                     itemsList.removeAt(pos)
                     notifyItemRemoved(pos)
-                    Snackbar.make(mParent, "Undo item remove", 5000)
-                        .setAction("Yes") {
-                            itemsList.add(removedItemPos!!, removedItem!!)
-                            notifyItemInserted(removedItemPos!!)
-                        }
-                        .show()
+                    if (showUndoOption) {
+                        Snackbar.make(mParent, "Undo item remove", 5000)
+                            .setAction("Yes") {
+                                itemsList.add(removedItemPos!!, removedItem!!)
+                                notifyItemInserted(removedItemPos!!)
+                            }
+                            .show()
+                    }
                 }
             }
 
@@ -240,6 +249,10 @@ class ChecklistAdapter(
 
     fun setMoveCheckedToBottom(shouldMove: Boolean) {
         moveCheckedToBottom = shouldMove
+    }
+
+    fun setShowUndoOption(shouldShow: Boolean) {
+        showUndoOption = shouldShow
     }
 
     fun getList(): ArrayList<ChecklistItem> {
