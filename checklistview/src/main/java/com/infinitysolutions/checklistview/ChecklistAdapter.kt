@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.list_item_view.view.*
 
 class ChecklistAdapter(
@@ -24,7 +25,10 @@ class ChecklistAdapter(
     private val hintTextColor: Int
 ) : RecyclerView.Adapter<ChecklistAdapter.ViewHolder>() {
     private lateinit var mDragListener: DragListener
+    private lateinit var mParent: View
     private var moveCheckedToBottom = true
+    private var removedItem: ChecklistItem? = null
+    private var removedItemPos: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(context).inflate(R.layout.list_item_view, parent, false)
@@ -100,8 +104,16 @@ class ChecklistAdapter(
         if (holder.adapterPosition != itemsList.size - 1) {
             holder.itemRemove.setOnClickListener {
                 val pos = holder.adapterPosition
+                removedItem = itemsList[pos]
+                removedItemPos = pos
                 itemsList.removeAt(pos)
                 notifyItemRemoved(pos)
+                Snackbar.make(mParent, "Undo item remove", 5000)
+                    .setAction("Yes") {
+                        itemsList.add(removedItemPos!!, removedItem!!)
+                        notifyItemInserted(removedItemPos!!)
+                    }
+                    .show()
             }
         }
     }
@@ -169,8 +181,16 @@ class ChecklistAdapter(
             if (holder.adapterPosition != itemsList.size - 1) {
                 holder.itemRemove.setOnClickListener {
                     val pos = holder.adapterPosition
+                    removedItem = itemsList[pos]
+                    removedItemPos = pos
                     itemsList.removeAt(pos)
                     notifyItemRemoved(pos)
+                    Snackbar.make(mParent, "Undo item remove", 5000)
+                        .setAction("Yes") {
+                            itemsList.add(removedItemPos!!, removedItem!!)
+                            notifyItemInserted(removedItemPos!!)
+                        }
+                        .show()
                 }
             }
 
@@ -207,6 +227,11 @@ class ChecklistAdapter(
 
     override fun getItemCount(): Int {
         return itemsList.size
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mParent = recyclerView
     }
 
     fun setDragListener(dragListener: DragListener) {

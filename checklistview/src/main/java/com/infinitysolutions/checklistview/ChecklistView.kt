@@ -53,19 +53,21 @@ class ChecklistView(context: Context, attrs: AttributeSet) : RecyclerView(contex
 
     fun setList(content: String){
         val itemsList = ArrayList<ChecklistItem>()
-        val items = content.split("\n")
-        val strBuilder = StringBuilder()
-        var isChecked: Boolean
-        for(item in items){
-            val arr = item.split(" ")
-            isChecked = arr[0] == "✓"
-            for(i in 1 until arr.size) {
-                strBuilder.append(arr[i])
-                if(i != arr.size-1)
-                    strBuilder.append(" ")
+        if (content.isNotEmpty()) {
+            val items = content.split("\n")
+            val strBuilder = StringBuilder()
+            var isChecked: Boolean
+            for (item in items) {
+                val arr = item.split(" ")
+                isChecked = arr[0] == "✓"
+                for (i in 1 until arr.size) {
+                    strBuilder.append(arr[i])
+                    if (i != arr.size - 1)
+                        strBuilder.append(" ")
+                }
+                itemsList.add(ChecklistItem(strBuilder.toString(), isChecked))
+                strBuilder.clear()
             }
-            itemsList.add(ChecklistItem(strBuilder.toString(), isChecked))
-            strBuilder.clear()
         }
         setList(itemsList)
     }
