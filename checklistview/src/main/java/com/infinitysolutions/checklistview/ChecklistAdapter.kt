@@ -112,8 +112,8 @@ class ChecklistAdapter(
                 itemsList.removeAt(pos)
                 notifyItemRemoved(pos)
                 if (showUndoOption) {
-                    Snackbar.make(mParent, "Undo item remove", 5000)
-                        .setAction("Yes") {
+                    Snackbar.make(mParent, "Item deleted", 5000)
+                        .setAction("Undo") {
                             itemsList.add(removedItemPos!!, removedItem!!)
                             notifyItemInserted(removedItemPos!!)
                         }

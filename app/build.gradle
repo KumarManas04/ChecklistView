@@ -10,8 +10,8 @@ android {
         applicationId "com.infinitysolutions.checklistview"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.3"
+        versionCode 6
+        versionName "1.5"
     }
     buildTypes {
         release {
