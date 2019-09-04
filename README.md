@@ -20,7 +20,7 @@ allprojects {
 Add a dependency to your project's <b>module</b> build.gradle
 ```
 dependencies {
-     implementation 'com.github.KumarManas04:ChecklistView:1.4'
+     implementation 'com.github.KumarManas04:ChecklistView:1.5'
 }
 ```
 ## Usage
