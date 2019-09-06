@@ -7,6 +7,8 @@ ChecklistView is an easy to use library to create To-do Lists or Checklists.
   - Set colors for drag handle, remove item button, text color and hint text color
   - Convert the list to string
   - Input the list content in string format
+  - Easy undo for item removed from list(with option to enable/disable)
+  - Option to enable/disable drag
 
 ## Including in your project
 Add below codes to your <b>root</b> build.gradle
